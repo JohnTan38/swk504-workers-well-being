@@ -39,3 +39,29 @@ The included `public/swk504-mark.svg` is a neutral **project placeholder**, not 
 The **Download Takeaway** link downloads the included `public/SWK504_Men_At_Work.pdf` file. Vite serves public files at the site root, so the PDF is accessible at `http://localhost:5173/SWK504_Men_At_Work.pdf` when the development server is running. The file in `public/` is the user-supplied seven-page PDF, unchanged.
 
 To replace the document later, overwrite `public/SWK504_Men_At_Work.pdf` with your updated PDF using the same filename. There is no Markdown download generator.
+
+## Interactive tile inspector — reference portfolio
+
+The hover pop-up is adapted from the tile behavior on `john-tan-data-analyst-cleverly-sg.vercel.app`. It uses a navy/red glassmorphism panel with category, metric, short description, practice relevance and topic tags. The popup follows the mouse, adjusts to screen edges, hides on mouse leave and appears when a tile is keyboard-focused. Press Escape to dismiss it.
+
+**Changed source files:**
+
+- `src/App.jsx` — adds `HoverTooltipArea` around the main content and `data-tooltip-*` text to 23 cards and presentation tiles. Edit these data attributes to change individual tooltip content.
+- `src/components/HoverTooltipArea.jsx` — reusable React event delegation, accessibility and floating inspector renderer.
+- `src/index.css` — hover elevation/glow styling and popup theme.
+- `tests/smoke.spec.ts` — browser tests for popup contents, viewport positioning, hover hide and focus.
+
+The uploaded `public/SWK504_Men_At_Work.pdf` remains unchanged and the Download Takeaway link still downloads it. The app does not require any new runtime packages for the popup.
+
+## Academic Audit (APA 7) — QR code and course texts
+
+The **Academic Audit (APA 7)** tab now displays the supplied `public/qr-code-men-at-work.png` near the audit heading. The image is bundled unchanged, and an adjacent link separately opens the SWK504 project website. The provided QR image decodes to `https://swk504-workers-well-being.vercel.app/`; the original image bytes are unchanged. White visual padding around the image helps camera scanning.
+
+The **Core Groupwork Texts** section contains these APA 7-formatted book references:
+
+- Northen, H., & Kurland, R. (2001). *Social work with groups* (3rd ed.). Columbia University Press.
+- Toseland, R. W., & Rivas, R. F. (2022). *An introduction to group work practice*. Pearson Education Limited.
+
+The original research, theory, and Singapore-context reference entries remain displayed. New textbook tiles use the existing keyboard-accessible hover inspector. The full application and PDF download are otherwise unchanged.
+
+**Files changed:** `src/App.jsx`, `src/index.css`, `tests/smoke.spec.ts`, `README.md`; **asset added:** `public/qr-code-men-at-work.png`.
