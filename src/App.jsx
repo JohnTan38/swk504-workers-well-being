@@ -2,161 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {
   Users, Shield, BookOpen, Layers, Award, Download, Search,
   ExternalLink, ChevronRight, Play, Pause, RotateCcw, AlertTriangle,
-  HeartHandshake, Building2, MapPin, CheckCircle2, Info, ArrowUpRight,
-  Sparkles, FileCheck, Scale, MessageSquare, Compass
+  HeartHandshake, Building2, MapPin, CheckCircle2, Info, ArrowUpRight
 } from 'lucide-react';
-
-// ============================================================================
-// CLEVERLY-SG STYLE GLASSMORPHIC HOVER TOOLTIP TILE COMPONENT
-// Replicates the floating glassmorphic hover popup tile with mouse-tracking
-// glow, badge header, deep-dive context, and academic source verification.
-// ============================================================================
-function HoverTooltipTile({
-  children,
-  badge,
-  title,
-  summary,
-  metrics,
-  source,
-  accentColor = 'crimson', // 'crimson' | 'amber' | 'emerald' | 'blue'
-  position = 'top'
-}) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [coords, setCoords] = useState({ x: 50, y: 50 });
-
-  const accentMap = {
-    crimson: {
-      border: 'hover:border-[#D32F2F]/70',
-      badgeBg: 'bg-[#D32F2F]/20 text-red-300 border-[#D32F2F]/40',
-      dot: 'bg-[#D32F2F]',
-      glow: 'rgba(211, 47, 47, 0.22)',
-      popupBorder: 'border-[#D32F2F]/50'
-    },
-    amber: {
-      border: 'hover:border-amber-400/70',
-      badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-      dot: 'bg-amber-400',
-      glow: 'rgba(245, 158, 11, 0.22)',
-      popupBorder: 'border-amber-400/50'
-    },
-    emerald: {
-      border: 'hover:border-emerald-400/70',
-      badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-      dot: 'bg-emerald-400',
-      glow: 'rgba(16, 185, 129, 0.22)',
-      popupBorder: 'border-emerald-400/50'
-    },
-    blue: {
-      border: 'hover:border-sky-400/70',
-      badgeBg: 'bg-sky-500/20 text-sky-300 border-sky-500/40',
-      dot: 'bg-sky-400',
-      glow: 'rgba(56, 189, 248, 0.22)',
-      popupBorder: 'border-sky-400/50'
-    }
-  };
-
-  const styleConfig = accentMap[accentColor] || accentMap.crimson;
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setCoords({ x, y });
-  };
-
-  return (
-    <div
-      className="relative group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onMouseMove={handleMouseMove}
-      onFocus={() => setIsHovered(true)}
-      onBlur={() => setIsHovered(false)}
-      tabIndex={0}
-    >
-      {/* Interactive Tile Surface with Mouse-Tracking Radial Spotlight */}
-      <div
-        className={`relative h-full transition-all duration-300 ease-out rounded-xl border border-slate-800/90 ${styleConfig.border} group-hover:-translate-y-1 group-hover:shadow-2xl overflow-hidden cursor-pointer`}
-        style={{
-          background: isHovered
-            ? `radial-gradient(circle at ${coords.x}% ${coords.y}%, ${styleConfig.glow}, rgba(15, 23, 42, 0.85) 70%)`
-            : 'rgba(15, 23, 42, 0.65)'
-        }}
-      >
-        {/* Subtle top-right hover indicator badge */}
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-900/90 border border-white/10 text-[10px] text-slate-400 group-hover:text-white group-hover:border-white/30 transition-all">
-          <Sparkles className="h-2.5 w-2.5 text-[#D32F2F]" />
-          <span>Insight</span>
-        </div>
-        {children}
-      </div>
-
-      {/* Floating Glassmorphic Popup Card (john-tan-data-analyst-cleverly-sg style) */}
-      <div
-        className={`pointer-events-none absolute z-50 left-1/2 -translate-x-1/2 w-80 md:w-96 p-4 rounded-2xl bg-slate-950/95 backdrop-blur-2xl border ${styleConfig.popupBorder} shadow-[0_20px_60px_rgba(0,0,0,0.85)] transition-all duration-200 ease-out ${
-          position === 'bottom' ? 'top-full mt-3' : 'bottom-full mb-3'
-        } ${
-          isHovered
-            ? 'opacity-100 translate-y-0 scale-100'
-            : position === 'bottom'
-            ? 'opacity-0 -translate-y-2 scale-95'
-            : 'opacity-0 translate-y-2 scale-95'
-        }`}
-      >
-        {/* Top Header Pill */}
-        <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2.5">
-          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${styleConfig.badgeBg}`}>
-            <span className={`h-1.5 w-1.5 rounded-full ${styleConfig.dot} animate-pulse`} />
-            {badge}
-          </span>
-          <span className="text-[10px] font-mono text-slate-400">SUSS SWK504 Defense</span>
-        </div>
-
-        {/* Popup Main Title & Analytical Explanation */}
-        <div className="mt-2.5">
-          <h4 className="text-xs font-extrabold text-white tracking-tight leading-snug">
-            {title}
-          </h4>
-          <p className="text-[11px] text-slate-300 mt-1.5 leading-relaxed">
-            {summary}
-          </p>
-        </div>
-
-        {/* Key Takeaways / Quantitative & Practice Metrics */}
-        {metrics && metrics.length > 0 && (
-          <div className="mt-3 pt-2.5 border-t border-white/10 grid grid-cols-1 gap-1.5">
-            {metrics.map((m, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-[10px] bg-white/5 px-2.5 py-1.5 rounded-lg border border-white/5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#D32F2F] shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-white">{m.label}: </span>
-                  <span className="text-slate-300">{m.value}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Academic Citation Footer */}
-        {source && (
-          <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400 italic">
-            <span>Ref: {source}</span>
-            <span className="text-emerald-400 font-semibold not-italic">Verified</span>
-          </div>
-        )}
-
-        {/* Caret Arrow */}
-        <div
-          className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-slate-950 border ${styleConfig.popupBorder} ${
-            position === 'bottom'
-              ? '-top-1.5 border-b-0 border-r-0'
-              : '-bottom-1.5 border-t-0 border-l-0'
-          }`}
-        />
-      </div>
-    </div>
-  );
-}
+import HoverTooltipArea from './components/HoverTooltipArea.jsx';
 
 const MODULES = [
   { id: 'overview', label: '1. Problem & Context', icon: Users },
@@ -171,7 +19,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCirclePhase, setActiveCirclePhase] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [timerSeconds, setTimerSeconds] = useState(70);
+  const [timerSeconds, setTimerSeconds] = useState(60);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [registerFilter, setRegisterFilter] = useState('all');
 
@@ -195,53 +43,13 @@ export default function App() {
     { title: 'Boehm & Cnaan (2012) 3 Criteria', category: 'Task 9 Framework', tab: 'task9' },
     { title: 'Action-to-Resolution Register', category: 'Implementation', tab: 'task9' },
     { title: 'SnapSAFE Confidential MOM Reporting', category: 'Singapore Regulations', tab: 'overview' },
-    { title: 'Primary Care Plan (PCP) Coverage', category: 'Healthcare Access', tab: 'overview' },
-    { title: 'ABCD Asset Mapping (Kretzmann & McKnight, 1993)', category: 'Community Model', tab: 'task9' },
-    { title: 'Consensus Organizing (Beck & Eichler, 2000)', category: 'Community Model', tab: 'task9' },
-    { title: 'Family Independence Initiative (FII / UpTogether)', category: 'Community Model', tab: 'task9' }
+    { title: 'Primary Care Plan (PCP) Coverage', category: 'Healthcare Access', tab: 'overview' }
   ];
 
   const filteredSearch = searchQuery.trim() === '' ? [] : searchItems.filter(item =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const downloadTakeaway = () => {
-    const content = `# SWK504 Group Project: Men at Work
-Target Population: South Asian Migrant Construction Workers in Singapore (Indian & Bangladeshi Nationals)
-Team Members: Chin Hong Ern Stephen, Marcus Liew Zhuo Yi, Muhammad Tirmuzi Bin Kasman, Noor Azlan Bin Salim, Tan Vie Ming
-
-## 1. Issue & Rationale
-- Foreign workforce includes ~380,000 construction work permit holders (MOM June 2026 CMP combined: 490,700).
-- Subramaniam et al. (2026) landmark study (N=1,465): 79.2% seek emotional help informally (60.9% family back home, 58.6% peers/dormitory neighbours).
-- 39.7% explicitly prefer a trained fellow worker; 69.1% prefer face-to-face workshops.
-
-## 2. Micro Groupwork Design
-- Theoretical Foundation: Hupcey (1998) Social Support Theory (Relationships, Perceived Support, Enacted Support, Reciprocal Social Exchange) & 4 Functions (Emotional, Informational, Instrumental, Appraisal).
-- Yalom's 3 Therapeutic Factors: Group Cohesiveness, Universality, Imparting of Information.
-- Group Stages: Northen & Kurland (Inclusion-Orientation, Uncertainty-Exploration, Mutuality-Goal Achievement, Separation-Termination).
-
-## 3. Task 9 Community Intervention Model: MW-WSP
-- Framework: Boehm & Cnaan (2012) 3 criteria:
-  1. Level of Community Involvement (Worker Community Advisory Council - WCAC)
-  2. Discursive Communication & Deliberative Democracy (Multilingual Listening & Co-Design Forums)
-  3. Integration of Policy & Implementation (Action-to-Resolution Register)
-- 3 Development Principles:
-  1. ABCD (Kretzmann & McKnight, 1993): Asset mapping existing capabilities.
-  2. Consensus Organizing (Beck & Eichler, 2000): Multi-Stakeholder Well-being Alliance based on mutual interest without compromising rights.
-  3. FII / UpTogether: Choice and control through self-directed well-being action plans.
-
-Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
-
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'SWK504_Men_At_Work_Submission_Takeaway.md');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const circlePhases = [
     {
@@ -359,7 +167,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="bg-white p-1.5 rounded-lg flex items-center justify-center shadow-md">
-              <img src="/suss-logo.svg" alt="SUSS Logo" className="h-8 w-auto" />
+              <img src="/suss-logo.svg" alt="SWK504 course project" className="h-8 w-auto" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = "/swk504-mark.svg"; }} />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -408,13 +216,14 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
 
           {/* Download Slide Deck / Takeaway */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={downloadTakeaway}
+            <a
+              href={`${import.meta.env.BASE_URL}SWK504_Men_At_Work.pdf`}
+              download="SWK504_Men_At_Work.pdf"
               className="flex items-center gap-2 px-3 py-1.5 bg-[#D32F2F] hover:bg-red-700 text-white rounded-lg text-xs font-semibold shadow-md transition-all active:scale-95"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Download Takeaway</span>
-            </button>
+            </a>
           </div>
         </div>
 
@@ -442,7 +251,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8">
+      <HoverTooltipArea className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8">
         {/* TAB 1: OVERVIEW & SINGAPORE DATA */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
@@ -453,154 +262,71 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                   Empowering South Asian Migrant Construction Workers in Singapore
                 </h2>
                 <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                  A dual-track social work intervention linking bunk-based peer mutual aid circles with a multi-stakeholder community partnership (MW-WSP). Hover over any interactive tile below to inspect theoretical mechanisms, empirical baselines, and statutory safeguards.
+                  A dual-track social work intervention linking bunk-based peer mutual aid circles with a multi-stakeholder community partnership (MW-WSP). Rooted in Singapore employment legislation, empirical help-seeking behaviors, and social work ethics.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs">
                   <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">Team: Men at Work</span>
                   <span className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">Cohort: Graduate Diploma in Social Work</span>
-                  <span className="px-2.5 py-1 rounded-md bg-red-950/60 text-red-200 border border-red-800/50 flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3 text-red-400" />
-                    Interactive Hover Tooltips Enabled
-                  </span>
+                  <span className="px-2.5 py-1 rounded-md bg-red-950/60 text-red-200 border border-red-800/50">Graded Defense Mode</span>
                 </div>
               </div>
             </div>
 
-            {/* Singapore Empirical Evidence Cards with Cleverly-SG Style Hover Tooltips */}
+            {/* Singapore Empirical Evidence Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <HoverTooltipTile
-                badge="Demographics & Safety"
-                title="MOM Workforce & Construction Risk Profile"
-                summary="Singapore recorded 1,655,900 foreign workers in June 2026, including 490,700 CMP Work Permit holders (~380,000 in construction). Leaving immediate families behind in India and Bangladesh disrupts natural kinship buffers."
-                metrics={[
-                  { label: 'CMP Sector Total', value: '490,700 Work Permit holders (June 2026)' },
-                  { label: 'WSH Injury Rate', value: '26.3 per 100k construction workers (2025 vs 31.0 in 2024)' },
-                  { label: 'Primary Cohort', value: '>57% Bangladeshi & Indian nationals in dorm studies' }
-                ]}
-                source="Ministry of Manpower (2026a, 2026b)"
-                accentColor="crimson"
-                position="bottom"
-              >
-                <div className="p-5 border-l-4 border-[#D32F2F] h-full">
-                  <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">MOM Workforce Context</div>
-                  <div className="text-3xl font-black text-white mt-2">~380,000</div>
-                  <div className="text-xs font-semibold text-slate-300">Construction Work Permit Holders</div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Primarily from Bangladesh and India. Disruption of primary family kinship buffers creates acute psychological vulnerability and isolation.
-                  </p>
-                </div>
-              </HoverTooltipTile>
+              <div className="glass-panel p-5 rounded-xl border-l-4 border-[#D32F2F]" role="group" tabIndex={0} aria-label={"MOM Workforce Context: The presentation estimates approximately 380,000 construction Work Permit holders, focusing on workers from India and Bangladesh."} data-tooltip-title={"MOM Workforce Context"} data-tooltip-category={"SINGAPORE CONTEXT"} data-tooltip-metric={"~380,000"} data-tooltip-description={"The presentation estimates approximately 380,000 construction Work Permit holders, focusing on workers from India and Bangladesh."} data-tooltip-detail={"Population scale frames the case for multilingual, dormitory-based support and community advocacy."} data-tooltip-tags={"MOM,Construction,Population"}>
+                <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">MOM Workforce Context</div>
+                <div className="text-3xl font-black text-white mt-2">~380,000</div>
+                <div className="text-xs font-semibold text-slate-300">Construction Work Permit Holders</div>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Primarily from Bangladesh and India. Disruption of primary family kinship buffers creates acute psychological vulnerability and isolation.
+                </p>
+              </div>
 
-              <HoverTooltipTile
-                badge="Help-Seeking Behavior"
-                title="Reliance on Informal Networks Over Clinics"
-                summary="A landmark mixed-methods study of 1,465 migrant workers in Singapore revealed overwhelming reliance on informal networks due to fears of repatriation, losing 'face', language barriers, and cost misconceptions."
-                metrics={[
-                  { label: 'Family/Friends Home', value: '60.9% seek emotional support from home country ties' },
-                  { label: 'Dormitory Peers', value: '58.6% turn to fellow workers/neighbours in Singapore' },
-                  { label: 'Key Deterrents', value: 'Fear of job termination, mental stigma & clinic costs' }
-                ]}
-                source="Subramaniam et al. (2026), Archives of Public Health"
-                accentColor="amber"
-                position="bottom"
-              >
-                <div className="p-5 border-l-4 border-amber-500 h-full">
-                  <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Subramaniam et al. (2026)</div>
-                  <div className="text-3xl font-black text-amber-400 mt-2">79.2%</div>
-                  <div className="text-xs font-semibold text-slate-300">Seek Informal Peer/Family Help</div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    Only a minority seek formal clinics due to fears of repatriation, loss of employment, cost misconceptions, and mental health stigma.
-                  </p>
-                </div>
-              </HoverTooltipTile>
+              <div className="glass-panel p-5 rounded-xl border-l-4 border-amber-500" role="group" tabIndex={0} aria-label={"Informal Help-Seeking: The cited 2026 Singapore study is used to describe migrant workers' preference for informal emotional support through family and peers."} data-tooltip-title={"Informal Help-Seeking"} data-tooltip-category={"EMPIRICAL EVIDENCE"} data-tooltip-metric={"79.2%"} data-tooltip-description={"The cited 2026 Singapore study is used to describe migrant workers' preference for informal emotional support through family and peers."} data-tooltip-detail={"The group model prioritises trusted peer-led conversations while maintaining routes to professional help."} data-tooltip-tags={"Subramaniam 2026,Support Networks,Groupwork"}>
+                <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Subramaniam et al. (2026)</div>
+                <div className="text-3xl font-black text-amber-400 mt-2">79.2%</div>
+                <div className="text-xs font-semibold text-slate-300">Seek Informal Peer/Family Help</div>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  Only a minority seek formal clinics due to fears of repatriation, loss of employment, cost misconceptions, and mental health stigma.
+                </p>
+              </div>
 
-              <HoverTooltipTile
-                badge="Evidence-Backed Design"
-                title="Why Bunk-Based Peer Support Works"
-                summary="Empirical findings confirm that male migrant workers strongly favor trained fellow migrant workers and in-person workshops over top-down clinical or purely digital interventions."
-                metrics={[
-                  { label: 'Peer Preference', value: '39.7% explicitly prefer a trained fellow worker' },
-                  { label: 'Format Preference', value: '69.1% prefer face-to-face workshops' },
-                  { label: 'Strategic Fit', value: 'Shifts workers from passive aid recipients to active providers' }
-                ]}
-                source="Subramaniam et al. (2026); Hupcey (1998)"
-                accentColor="emerald"
-                position="bottom"
-              >
-                <div className="p-5 border-l-4 border-emerald-500 h-full">
-                  <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Worker Preferences</div>
-                  <div className="text-3xl font-black text-emerald-400 mt-2">39.7%</div>
-                  <div className="text-xs font-semibold text-slate-300">Prefer Trained Peer Support</div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    69.1% explicitly endorse face-to-face workshops over digital platforms, confirming the necessity of physical bunk-based circles.
-                  </p>
-                </div>
-              </HoverTooltipTile>
+              <div className="glass-panel p-5 rounded-xl border-l-4 border-emerald-500" role="group" tabIndex={0} aria-label={"Preference for Trained Peers: The presentation cites 39.7% preferring trained fellow-worker support and 69.1% endorsing face-to-face workshops."} data-tooltip-title={"Preference for Trained Peers"} data-tooltip-category={"WORKER PREFERENCES"} data-tooltip-metric={"39.7%"} data-tooltip-description={"The presentation cites 39.7% preferring trained fellow-worker support and 69.1% endorsing face-to-face workshops."} data-tooltip-detail={"A bilingual peer-facilitator model complements in-person bunk-circle sessions."} data-tooltip-tags={"Peer Leadership,Face-to-Face,Participation"}>
+                <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Worker Preferences</div>
+                <div className="text-3xl font-black text-emerald-400 mt-2">39.7%</div>
+                <div className="text-xs font-semibold text-slate-300">Prefer Trained Peer Support</div>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  69.1% explicitly endorse face-to-face workshops over digital platforms, confirming the necessity of physical bunk-based circles.
+                </p>
+              </div>
             </div>
 
-            {/* Regulatory Safeguards in Singapore with Hover Tooltips */}
+            {/* Regulatory Safeguards in Singapore */}
             <div className="glass-panel p-6 rounded-2xl">
               <h3 className="text-base font-bold text-white flex items-center gap-2">
                 <Shield className="h-4 w-4 text-[#D32F2F]" />
-                Singapore Statutory Infrastructure & Safeguards (Hover for Legal/Ethical Protocols)
+                Singapore Statutory Infrastructure & Safeguards
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <HoverTooltipTile
-                  badge="WSH Statutory Channel"
-                  title="MOM SnapSAFE Confidential Escalation"
-                  summary="SnapSAFE allows workers to upload photos and location details of workplace safety hazards. MOM keeps the whistleblower's identity strictly confidential from the employer."
-                  metrics={[
-                    { label: 'Governance Rule', value: 'Urgent safety hazards bypass consensus dialogue' },
-                    { label: 'Role Boundary', value: 'Workers never replace statutory safety officers' }
-                  ]}
-                  source="Ministry of Manpower (n.d.-a)"
-                  accentColor="crimson"
-                >
-                  <div className="p-4 h-full">
-                    <div className="font-semibold text-sm text-slate-200">MOM SnapSAFE</div>
-                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Statutory reporting tool for severe workplace safety hazards. Strict identity anonymity prevents employer retaliation. Unsafe conditions bypass consensual negotiation.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Multilingual E-Service"
-                  title="FWMOMCare Native-Language Portal"
-                  summary="Mandatory mobile app enabling migrant workers to report accommodation or catered food issues and request direct callbacks from MOM officers in Bangla, Tamil, or Hindi."
-                  metrics={[
-                    { label: 'Accessibility', value: 'Bilingual peer leaders assist with app navigation' },
-                    { label: 'Scope', value: 'Covers salary arrears, dorm upkeep & meal disputes' }
-                  ]}
-                  source="Ministry of Manpower (n.d.-b)"
-                  accentColor="blue"
-                >
-                  <div className="p-4 h-full">
-                    <div className="font-semibold text-sm text-slate-200">FWMOMCare Portal</div>
-                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Mobile engagement enabling migrant workers to directly request MOM officer assistance in native languages (Bangla, Tamil).
-                    </p>
-                  </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Healthcare Mandate"
-                  title="Primary Care Plan (PCP) Literacy"
-                  summary="Employers are legally required to purchase PCP coverage for Work Permit and S-Pass holders residing in dormitories, providing low-cost medical and mental health consultations."
-                  metrics={[
-                    { label: 'Barrier Addressed', value: 'Corrects worker fears of exorbitant clinic bills' },
-                    { label: 'NGO Complement', value: 'Linked with HealthServe & Project DAWN mental health' }
-                  ]}
-                  source="MOM Primary Care Plan; HealthServe (2026)"
-                  accentColor="emerald"
-                >
-                  <div className="p-4 h-full">
-                    <div className="font-semibold text-sm text-slate-200">Primary Care Plan (PCP)</div>
-                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                      Mandatory baseline healthcare scheme for migrant workers. Group leaders impart clear guidance to correct misconceptions regarding clinical costs.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
+                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"MOM SnapSAFE: A reporting route discussed in the project for workplace safety concerns, including hazards requiring formal attention."} data-tooltip-title={"MOM SnapSAFE"} data-tooltip-category={"WORKPLACE SAFETY"} data-tooltip-metric={"Reporting"} data-tooltip-description={"A reporting route discussed in the project for workplace safety concerns, including hazards requiring formal attention."} data-tooltip-detail={"Serious safety issues are escalated to official channels instead of being left to informal negotiation."} data-tooltip-tags={"MOM,Worker Rights,Escalation"}>
+                  <div className="font-semibold text-sm text-slate-200">MOM SnapSAFE</div>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Statutory reporting tool for severe workplace safety hazards. Strict identity anonymity prevents employer retaliation. Unsafe conditions bypass consensual negotiation.
+                  </p>
+                </div>
+                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"FWMOMCare: The app presents FWMOMCare as an avenue for migrant workers to seek assistance and engage with MOM."} data-tooltip-title={"FWMOMCare"} data-tooltip-category={"MIGRANT WORKER SUPPORT"} data-tooltip-metric={"Assistance"} data-tooltip-description={"The app presents FWMOMCare as an avenue for migrant workers to seek assistance and engage with MOM."} data-tooltip-detail={"Peer facilitators can help members identify trustworthy government support and information."} data-tooltip-tags={"MOM,Assistance,Multilingual"}>
+                  <div className="font-semibold text-sm text-slate-200">FWMOMCare Portal</div>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Mobile engagement enabling migrant workers to directly request MOM officer assistance in native languages (Bangla, Tamil).
+                  </p>
+                </div>
+                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Primary Care Plan (PCP): An employer-arranged primary healthcare coverage scheme covered in the app's orientation material."} data-tooltip-title={"Primary Care Plan (PCP)"} data-tooltip-category={"HEALTHCARE ACCESS"} data-tooltip-metric={"PCP"} data-tooltip-description={"An employer-arranged primary healthcare coverage scheme covered in the app's orientation material."} data-tooltip-detail={"Informational support includes helping workers understand routes to primary healthcare services."} data-tooltip-tags={"Healthcare,Information,Access"}>
+                  <div className="font-semibold text-sm text-slate-200">Primary Care Plan (PCP)</div>
+                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                    Mandatory baseline healthcare scheme for migrant workers. Group leaders impart clear guidance to correct misconceptions regarding clinical costs.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -622,156 +348,63 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                 </div>
               </div>
 
-              {/* 4 Functions of Hupcey with Hover Tooltips */}
+              {/* 4 Functions of Hupcey */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-                <HoverTooltipTile
-                  badge="Hupcey Function 1"
-                  title="Emotional Support in Dormitory Bunks"
-                  summary="Provides empathy, reassurance, trust, and psychological buffering in native languages (Bangla, Tamil, Hindi) so workers can process homesickness and workplace stress without fear of gossip."
-                  metrics={[
-                    { label: 'Core Mechanism', value: 'Replaces disrupted primary kinship ties in India/Bangladesh' },
-                    { label: 'Safeguard', value: 'Closed bunk membership + talking-piece circle norms' }
-                  ]}
-                  source="Hupcey (1998); Peterson & Bredow (2014)"
-                  accentColor="crimson"
-                  position="bottom"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-red-400 uppercase">Emotional Support</div>
-                    <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                      Safe bunk circles conducted in native languages (Bangla, Tamil) to ease homesickness and workplace trauma without fear of gossip.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Hupcey Function 2"
-                  title="Informational Support & Rights Literacy"
-                  summary="Equips workers with practical guidance, translated advice, and systemic literacy to navigate unfamiliar Singapore laws, healthcare coverage, and reporting channels safely."
-                  metrics={[
-                    { label: 'Key Pathways', value: 'MOM FWMOMCare, SnapSAFE & PCP clinic coverage' },
-                    { label: 'Delivery', value: 'Bilingual social workers + trained peer connectors' }
-                  ]}
-                  source="Hupcey (1998); Subramaniam et al. (2026)"
-                  accentColor="amber"
-                  position="bottom"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-amber-400 uppercase">Informational Support</div>
-                    <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                      Bilingual orientation on Singapore norms, MOM SnapSAFE reporting, and PCP healthcare access pathways.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Hupcey Function 3"
-                  title="Instrumental Support & Daily Mutual Aid"
-                  summary="Tangible, concrete assistance and collective problem-solving for immediate survival and liveability needs inside the dormitory and worksite."
-                  metrics={[
-                    { label: 'Bunk Routines', value: 'Collective checks on ventilation, fans & hygiene' },
-                    { label: 'Peer Escort', value: 'Accompanying unwell co-workers to HealthServe or TWC2' }
-                  ]}
-                  source="Hupcey (1998); Muskat et al. (2020)"
-                  accentColor="blue"
-                  position="bottom"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-blue-400 uppercase">Instrumental Support</div>
-                    <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                      Peer hygiene audits, navigating catered meal disputes, and escorting ill bunkmates to NGO clinics like HealthServe.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Hupcey Function 4"
-                  title="Appraisal Support & Dignity Affirmation"
-                  summary="Constructive feedback, validation, and social affirmation that strengthen self-efficacy, occupational pride, and agency against societal stigma."
-                  metrics={[
-                    { label: 'Identity Shift', value: 'Reframes workers as valued builders of Singapore' },
-                    { label: 'Leadership', value: 'Trains co-workers as Peer Support Leaders' }
-                  ]}
-                  source="Hupcey (1998); Kretzmann & McKnight (1993)"
-                  accentColor="emerald"
-                  position="bottom"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-emerald-400 uppercase">Appraisal Support</div>
-                    <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                      Affirming workers' dignity as national infrastructure builders, validating coping efforts, and peer leader training.
-                    </p>
-                  </div>
-                </HoverTooltipTile>
+                <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Emotional Support: Provide culturally responsive listening and a sense of belonging within voluntary dormitory-based support circles."} data-tooltip-title={"Emotional Support"} data-tooltip-category={"HUPCEY — SUPPORT FUNCTIONS"} data-tooltip-metric={"Empathy"} data-tooltip-description={"Provide culturally responsive listening and a sense of belonging within voluntary dormitory-based support circles."} data-tooltip-detail={"Shared conversations about homesickness and work pressures can build mutual trust."} data-tooltip-tags={"Social Support,Emotional,Cohesion"}>
+                  <div className="text-xs font-bold text-red-400 uppercase">Emotional Support</div>
+                  <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Safe bunk circles conducted in native languages (Bangla, Tamil) to ease homesickness and workplace trauma without fear of gossip.
+                  </p>
+                </div>
+                <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Informational Support: Share clear information in familiar languages about local expectations, safety reporting and healthcare navigation."} data-tooltip-title={"Informational Support"} data-tooltip-category={"HUPCEY — SUPPORT FUNCTIONS"} data-tooltip-metric={"Guidance"} data-tooltip-description={"Share clear information in familiar languages about local expectations, safety reporting and healthcare navigation."} data-tooltip-detail={"Bilingual peer leaders help reduce literacy and language barriers."} data-tooltip-tags={"Rights Literacy,PCP,Bilingual"}>
+                  <div className="text-xs font-bold text-amber-400 uppercase">Informational Support</div>
+                  <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Bilingual orientation on Singapore norms, MOM SnapSAFE reporting, and PCP healthcare access pathways.
+                  </p>
+                </div>
+                <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Instrumental Support: Mobilise practical peer assistance for everyday well-being concerns, including food and accommodation problems."} data-tooltip-title={"Instrumental Support"} data-tooltip-category={"HUPCEY — SUPPORT FUNCTIONS"} data-tooltip-metric={"Practical help"} data-tooltip-description={"Mobilise practical peer assistance for everyday well-being concerns, including food and accommodation problems."} data-tooltip-detail={"Mutual aid can include navigating support services or helping a colleague reach assistance."} data-tooltip-tags={"Practical Aid,Dormitories,Well-being"}>
+                  <div className="text-xs font-bold text-blue-400 uppercase">Instrumental Support</div>
+                  <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Peer hygiene audits, navigating catered meal disputes, and escorting ill bunkmates to NGO clinics like HealthServe.
+                  </p>
+                </div>
+                <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Appraisal Support: Affirm workers' contributions, coping efforts and strengths through recognition and constructive peer feedback."} data-tooltip-title={"Appraisal Support"} data-tooltip-category={"HUPCEY — SUPPORT FUNCTIONS"} data-tooltip-metric={"Affirmation"} data-tooltip-description={"Affirm workers' contributions, coping efforts and strengths through recognition and constructive peer feedback."} data-tooltip-detail={"A strengths-based stance promotes worker agency and dignity."} data-tooltip-tags={"Dignity,Strengths,Feedback"}>
+                  <div className="text-xs font-bold text-emerald-400 uppercase">Appraisal Support</div>
+                  <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                    Affirming workers' dignity as national infrastructure builders, validating coping efforts, and peer leader training.
+                  </p>
+                </div>
               </div>
 
-              {/* Yalom Therapeutic Factors with Hover Tooltips */}
+              {/* Yalom Therapeutic Factors */}
               <div className="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <HoverTooltipTile
-                  badge="Yalom Factor 1"
-                  title="Group Cohesiveness: Precondition for Change"
-                  summary="Yalom defines cohesiveness as the group equivalent of the therapeutic alliance. Without a trusted 'brotherhood', other therapeutic factors cannot operate."
-                  metrics={[
-                    { label: 'Slide 4 Anchor', value: 'Regular weekly sessions & shared well-being roadmap' },
-                    { label: 'Cross-Cultural Bridge', value: 'Overcomes Bangla vs. Tamil/Hindi sub-grouping' }
-                  ]}
-                  source="Yalom & Leszcz (2020)"
-                  accentColor="crimson"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-[#D32F2F]"></span>
-                      1. Group Cohesiveness
-                    </div>
-                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                      Precondition for change. Regular bunk sessions with shared well-being roadmaps bridge linguistic subgroups and build trust.
-                    </p>
+                <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800" role="group" tabIndex={0} aria-label={"Group Cohesiveness: Repeated sessions and shared goals can strengthen trust between members of multilingual dormitory groups."} data-tooltip-title={"Group Cohesiveness"} data-tooltip-category={"YALOM THERAPEUTIC FACTORS"} data-tooltip-metric={"Belonging"} data-tooltip-description={"Repeated sessions and shared goals can strengthen trust between members of multilingual dormitory groups."} data-tooltip-detail={"Cohesion helps create the conditions for participation and collective action."} data-tooltip-tags={"Yalom,Trust,Common Goals"}>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-[#D32F2F]"></span>
+                    1. Group Cohesiveness
                   </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Yalom Factor 2"
-                  title="Universality: 'We Are in the Same Boat'"
-                  summary="Disconfirms a worker's belief that their distress is unique or a personal failure. Realizing bunkmates share identical struggles replaces stoic shame with collective validation."
-                  metrics={[
-                    { label: 'Slide 4 Anchor', value: 'Sharing of food/housing concerns & peer solutions' },
-                    { label: 'Stigma Reduction', value: 'Normalizes emotional help-seeking across cultures' }
-                  ]}
-                  source="Yalom & Leszcz (2020); Subramaniam et al. (2026)"
-                  accentColor="amber"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-amber-400"></span>
-                      2. Universality
-                    </div>
-                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                      "We are in the same boat." Openly voicing meal, bunk, and remittance pressure replaces individual stigma with collective validation.
-                    </p>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Precondition for change. Regular bunk sessions with shared well-being roadmaps bridge linguistic subgroups and build trust.
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800" role="group" tabIndex={0} aria-label={"Universality: Members discover that concerns about meals, living conditions or family remittances may be shared by others."} data-tooltip-title={"Universality"} data-tooltip-category={"YALOM THERAPEUTIC FACTORS"} data-tooltip-metric={"Shared experience"} data-tooltip-description={"Members discover that concerns about meals, living conditions or family remittances may be shared by others."} data-tooltip-detail={"Hearing common experiences may reduce isolation and foster mutual validation."} data-tooltip-tags={"Yalom,Peer Sharing,Validation"}>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-amber-400"></span>
+                    2. Universality
                   </div>
-                </HoverTooltipTile>
-
-                <HoverTooltipTile
-                  badge="Yalom Factor 3"
-                  title="Imparting of Information: Closing the Literacy Gap"
-                  summary="Combines didactic guidance from social workers with practical peer resource navigation to connect workers to translated statutory and NGO channels."
-                  metrics={[
-                    { label: 'Slide 4 Anchor', value: 'Link translated information & community resources' },
-                    { label: 'Ecosystem Links', value: 'High Commissions, MOM, TWC2 & HealthServe' }
-                  ]}
-                  source="Yalom & Leszcz (2020)"
-                  accentColor="emerald"
-                >
-                  <div className="p-4 h-full">
-                    <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
-                      3. Imparting Information
-                    </div>
-                    <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                      Didactic and peer guidance. Connecting members to translated resources from embassies, MOM, and NGOs (TWC2, HealthServe).
-                    </p>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    "We are in the same boat." Openly voicing meal, bunk, and remittance pressure replaces individual stigma with collective validation.
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800" role="group" tabIndex={0} aria-label={"Imparting Information: Facilitators and peers exchange practical knowledge and point members towards translated resources."} data-tooltip-title={"Imparting Information"} data-tooltip-category={"YALOM THERAPEUTIC FACTORS"} data-tooltip-metric={"Resources"} data-tooltip-description={"Facilitators and peers exchange practical knowledge and point members towards translated resources."} data-tooltip-detail={"Examples in the project include embassies, MOM, TWC2 and HealthServe."} data-tooltip-tags={"Yalom,Resource Navigation,Learning"}>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
+                    3. Imparting Information
                   </div>
-                </HoverTooltipTile>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Didactic and peer guidance. Connecting members to translated resources from embassies, MOM, and NGOs (TWC2, HealthServe).
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -820,151 +453,37 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
           <div className="space-y-6">
             <div className="glass-panel p-6 rounded-2xl">
               <div className="max-w-3xl">
-                <span className="text-xs uppercase font-extrabold tracking-widest text-[#D32F2F]">Community Practice Model (20 Marks)</span>
+                <span className="text-xs uppercase font-extrabold tracking-widest text-[#D32F2F]">Community Practice Model</span>
                 <h2 className="text-2xl font-bold text-white mt-1">
                   Migrant Worker Well-being & Safety Partnership (MW-WSP)
                 </h2>
                 <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                  Synthesizing 3 Boehm & Cnaan (2012) criteria with 3 core community development principles (ABCD, Consensus Organizing, and FII Choice-and-Control). Hover over any pillar to inspect operational safeguards.
+                  Synthesizing Boehm & Cnaan (2012) framework criteria with three core development principles: ABCD, Consensus Organizing, and FII Choice-and-Control.
                 </p>
               </div>
 
-              {/* 3 Boehm & Cnaan Criteria with Hover Tooltips */}
-              <div className="mt-6">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                  Part A: Three Boehm & Cnaan (2012) Practice Criteria
+              {/* 3 Boehm & Cnaan Criteria */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div className="bg-slate-900/80 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Community Involvement: Voluntary worker delegates from peer circles help set priorities for the community intervention."} data-tooltip-title={"Community Involvement"} data-tooltip-category={"BOEHM & CNAAN — CRITERION 1"} data-tooltip-metric={"Worker Council"} data-tooltip-description={"Voluntary worker delegates from peer circles help set priorities for the community intervention."} data-tooltip-detail={"The proposed Worker Community Advisory Council gives members meaningful representation."} data-tooltip-tags={"Participation,WCAC,Voice"}>
+                  <div className="text-xs font-bold text-[#D32F2F] uppercase">1. Community Involvement</div>
+                  <div className="text-sm font-semibold text-white mt-1">Worker Community Advisory Council</div>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Voluntary rotating delegates from bunk circles set the agenda. Employer appointment of representatives is strictly prohibited to prevent co-optation.
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <HoverTooltipTile
-                    badge="Boehm & Cnaan Criterion 1"
-                    title="Level of Community Involvement"
-                    summary="Establishes whose priorities count. Each dormitory circle voluntarily nominates rotating delegates to the Worker Community Advisory Council (WCAC) with anonymous input options."
-                    metrics={[
-                      { label: 'Agenda Power', value: 'Worker delegates control agenda & approve publications' },
-                      { label: 'Anti-Cooptation', value: 'Employers cannot select or vet worker delegates' }
-                    ]}
-                    source="Boehm & Cnaan (2012, pp. 146-151)"
-                    accentColor="crimson"
-                    position="bottom"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-[#D32F2F] uppercase">1. Community Involvement</div>
-                      <div className="text-sm font-semibold text-white mt-1">Worker Community Advisory Council</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Voluntary rotating delegates from bunk circles set the agenda. Employer appointment of representatives is strictly prohibited to prevent co-optation.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
-
-                  <HoverTooltipTile
-                    badge="Boehm & Cnaan Criterion 2"
-                    title="Discursive Communication & Deliberative Democracy"
-                    summary="Determines how disagreements are handled across unequal power. Holds worker-only pre-caucuses before independently moderated sessions with operators and employers."
-                    metrics={[
-                      { label: 'Safe Dissent', value: 'Confidential dissent logs & right to refuse joint sessions' },
-                      { label: 'Rights Floor', value: 'No pressure to trade statutory rights for consensus' }
-                    ]}
-                    source="Boehm & Cnaan (2012); Toseland et al. (2004)"
-                    accentColor="amber"
-                    position="bottom"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-amber-400 uppercase">2. Discursive Deliberation</div>
-                      <div className="text-sm font-semibold text-white mt-1">Multilingual Co-Design Forums</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Worker-only caucuses precede joint meetings. Dissent is protected confidentially without forcing workers to trade statutory rights.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
-
-                  <HoverTooltipTile
-                    badge="Boehm & Cnaan Criterion 3"
-                    title="Integration of Policy & Implementation"
-                    summary="Specifies what must change after deliberation so forums do not become tokenistic talk-shops. Tracks non-identifying community remedies from assignment to verification."
-                    metrics={[
-                      { label: 'Pilot Target', value: '>=70% of agreed non-urgent actions completed on time' },
-                      { label: 'Statutory Bypass', value: 'Urgent hazards go straight to MOM SnapSAFE' }
-                    ]}
-                    source="Boehm & Cnaan (2012)"
-                    accentColor="emerald"
-                    position="bottom"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-emerald-400 uppercase">3. Policy to Implementation</div>
-                      <div className="text-sm font-semibold text-white mt-1">Action-to-Resolution Register</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Transparent accountability logging time-bound commitments. Urgent safety risks bypass dialogue directly to MOM SnapSAFE.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
+                <div className="bg-slate-900/80 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Discursive Deliberation: Worker-only discussions and multilingual forums create space to share concerns and negotiate actions."} data-tooltip-title={"Discursive Deliberation"} data-tooltip-category={"BOEHM & CNAAN — CRITERION 2"} data-tooltip-metric={"Co-design"} data-tooltip-description={"Worker-only discussions and multilingual forums create space to share concerns and negotiate actions."} data-tooltip-detail={"Confidentiality and the right to disagree are central protections in the model."} data-tooltip-tags={"Dialogue,Power Sharing,Language"}>
+                  <div className="text-xs font-bold text-amber-400 uppercase">2. Discursive Deliberation</div>
+                  <div className="text-sm font-semibold text-white mt-1">Multilingual Co-Design Forums</div>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Worker-only caucuses precede joint meetings. Dissent is protected confidentially without forcing workers to trade statutory rights.
+                  </p>
                 </div>
-              </div>
-
-              {/* 3 Community Development Principles with Hover Tooltips */}
-              <div className="mt-6 pt-6 border-t border-slate-800">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                  Part B: Three Community Development Principles (ABCD, Consensus Organizing, FII)
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <HoverTooltipTile
-                    badge="ABCD Principle"
-                    title="Identify & Mobilize Existing Assets"
-                    summary="Maps workers' bilingual skills, trade safety experience, informal food networks, and cultural associations rather than viewing workers through a deficit lens."
-                    metrics={[
-                      { label: 'Ethical Boundary', value: 'Prevents unpaid responsibilisation of migrant workers' },
-                      { label: 'Safeguard', value: 'Assets supplement—never replace—employer legal duties' }
-                    ]}
-                    source="Kretzmann & McKnight (1993); Harrison et al. (2019)"
-                    accentColor="blue"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-sky-400 uppercase">1. Asset-Based (ABCD)</div>
-                      <div className="text-sm font-semibold text-white mt-1">Worker-Led Asset Mapping</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Mobilizes multilingual peer connectors and occupational know-how while ensuring unpaid workers are never turned into substitute safety inspectors.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
-
-                  <HoverTooltipTile
-                    badge="Consensus Organizing"
-                    title="Build Partnerships Around Mutual Self-Interest"
-                    summary="Aligns worker desire for dignity and safe meals/bunks with operator and employer interest in operational stability, lower turnover, and early dispute resolution."
-                    metrics={[
-                      { label: 'Shared-Gain Pilot', value: 'Transparent meal-feedback & 48h maintenance SLA' },
-                      { label: 'Escalation Trigger', value: 'Independent advocacy & enforcement when consensus fails' }
-                    ]}
-                    source="Beck & Eichler (2000); Eichler (2007)"
-                    accentColor="amber"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-amber-400 uppercase">2. Consensus Organizing</div>
-                      <div className="text-sm font-semibold text-white mt-1">Multi-Stakeholder Well-being Alliance</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Connects worker circles with operators, employers, and NGOs (HealthServe, TWC2) around shared gains without waiving statutory protections.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
-
-                  <HoverTooltipTile
-                    badge="FII / UpTogether"
-                    title="Choice & Control Through Self-Directed Action"
-                    summary="Adapts the FII autonomy principle so dormitory circles draft their own priorities and use flexible micro-resources without professional paternalism."
-                    metrics={[
-                      { label: 'Methodological Note', value: 'Conceptual adaptation (not a US family trial claim)' },
-                      { label: 'Autonomy Rule', value: 'Micro-resources are never conditional on public speaking' }
-                    ]}
-                    source="UpTogether (n.d.); OECD (2023)"
-                    accentColor="emerald"
-                  >
-                    <div className="p-4 h-full">
-                      <div className="text-xs font-bold text-emerald-400 uppercase">3. Family Independence (FII)</div>
-                      <div className="text-sm font-semibold text-white mt-1">Worker-Directed Action Plans</div>
-                      <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                        Preserves heterogeneity and worker choice over goals (dietary suitability, bunk upkeep, or quiet referral) with full opt-out rights.
-                      </p>
-                    </div>
-                  </HoverTooltipTile>
+                <div className="bg-slate-900/80 p-4 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Policy to Implementation: An Action-to-Resolution Register tracks agreed actions, responsible leads and verification steps."} data-tooltip-title={"Policy to Implementation"} data-tooltip-category={"BOEHM & CNAAN — CRITERION 3"} data-tooltip-metric={"Accountability"} data-tooltip-description={"An Action-to-Resolution Register tracks agreed actions, responsible leads and verification steps."} data-tooltip-detail={"Formal reporting is retained for serious workplace safety concerns."} data-tooltip-tags={"Governance,Follow-through,Safeguards"}>
+                  <div className="text-xs font-bold text-emerald-400 uppercase">3. Policy to Implementation</div>
+                  <div className="text-sm font-semibold text-white mt-1">Action-to-Resolution Register</div>
+                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                    Transparent accountability logging time-bound commitments. Urgent safety risks bypass dialogue directly to MOM SnapSAFE.
+                  </p>
                 </div>
               </div>
             </div>
@@ -1053,7 +572,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                   <div className="text-right">
                     <div className="text-[10px] uppercase font-bold text-slate-400">Slide Target: {slides[activeSlide].timeTarget}</div>
                     <div className={`font-mono text-lg font-black ${timerSeconds <= 15 ? 'text-red-400 animate-pulse' : 'text-emerald-400'}`}>
-                      00:{timerSeconds < 10 ? `0${timerSeconds}` : timerSeconds}
+                      {String(Math.floor(timerSeconds / 60)).padStart(2, '0')}:{String(timerSeconds % 60).padStart(2, '0')}
                     </div>
                   </div>
                   <button
@@ -1065,7 +584,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                   <button
                     onClick={() => {
                       setIsTimerRunning(false);
-                      setTimerSeconds(70);
+                      setTimerSeconds(parseInt(slides[activeSlide].timeTarget, 10));
                     }}
                     className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
                   >
@@ -1079,9 +598,15 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                 {slides.map((s, idx) => (
                   <button
                     key={idx}
+                    data-tooltip-title={s.title}
+                    data-tooltip-category="PRESENTATION DEFENSE"
+                    data-tooltip-metric={s.timeTarget}
+                    data-tooltip-description={s.bullets[0]}
+                    data-tooltip-detail="Hover to preview the slide topic; select this tile to view its talking points and timed script."
+                    data-tooltip-tags="Slides,Defense,Speaker Notes"
                     onClick={() => {
                       setActiveSlide(idx);
-                      setTimerSeconds(idx === 3 ? 70 : 65);
+                      setTimerSeconds(parseInt(s.timeTarget, 10));
                       setIsTimerRunning(false);
                     }}
                     className={`p-2.5 rounded-xl text-left border transition-all ${
@@ -1098,7 +623,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
 
               {/* Current Slide Display Canvas */}
               <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-slate-900/90 p-5 rounded-xl border border-slate-800">
+                <div className="bg-slate-900/90 p-5 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Presentation Visual Anchors: These are the concise verbal and visual points for the currently selected slide."} data-tooltip-title={"Presentation Visual Anchors"} data-tooltip-category={"DEFENSE SIMULATOR"} data-tooltip-metric={"4 key points"} data-tooltip-description={"These are the concise verbal and visual points for the currently selected slide."} data-tooltip-detail={"Use the anchors to organise the presentation without reading every sentence verbatim."} data-tooltip-tags={"Presentation,Key Ideas,Structure"}>
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
                     <span>Visual Presentation Anchors</span>
                     <span className="text-[#D32F2F]">Slide {activeSlide + 1} of 4</span>
@@ -1113,7 +638,7 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
                   </ul>
                 </div>
 
-                <div className="bg-[#1B2A4A]/50 p-5 rounded-xl border border-white/10">
+                <div className="bg-[#1B2A4A]/50 p-5 rounded-xl border border-white/10" role="group" tabIndex={0} aria-label={"Timed Speaker Script: The selected slide's drafted narration is displayed here for presentation rehearsal."} data-tooltip-title={"Timed Speaker Script"} data-tooltip-category={"DEFENSE SIMULATOR"} data-tooltip-metric={"60–75 sec"} data-tooltip-description={"The selected slide's drafted narration is displayed here for presentation rehearsal."} data-tooltip-detail={"The stopwatch and slide-specific time targets support practice delivery."} data-tooltip-tags={"Speaker Notes,Practice,Timing"}>
                   <div className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center justify-between">
                     <span>Verbatim Speaker Script (Timed)</span>
                     <span className="text-xs text-slate-300">~60-75s delivery</span>
@@ -1137,93 +662,44 @@ Verified October 30, 2026 | Singapore University of Social Sciences (SUSS)`;
             <div>
               <span className="text-xs uppercase font-extrabold tracking-widest text-[#D32F2F]">Scholarly Verification</span>
               <h2 className="text-xl md:text-2xl font-bold text-white mt-1">APA 7th Reference Audit & Methodological Integrity</h2>
-              <p className="text-xs text-slate-300 mt-1">Hover over any reference tile to inspect methodological boundaries and source-audit corrections.</p>
+              <p className="text-xs text-slate-300 mt-1">Verified against Singapore peer-reviewed empirical studies and ministry data.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <HoverTooltipTile
-                badge="Empirical Study Audit"
-                title="Subramaniam et al. (2026) Scope & Limits"
-                summary="Mixed-methods study of 1,465 migrant workers and 1,462 migrant domestic workers in Singapore. Confirms 79.2% informal help-seeking and 39.7% peer preference."
-                metrics={[
-                  { label: 'Audit Correction', value: 'Covers CMP-sector workers broadly, not exclusively construction' },
-                  { label: 'Causal Boundary', value: 'Observational baseline; does not prove MW-WSP efficacy' }
-                ]}
-                source="Archives of Public Health, 84, Article 45"
-                accentColor="amber"
-              >
-                <div className="p-4 h-full">
-                  <span className="font-bold text-white">Subramaniam, M., Zhang, Y., Satghare, P., Koh, Y. S., et al. (2026).</span>
-                  <p className="text-slate-300 mt-1">
-                    Mental health help-seeking behaviour among migrant workers and migrant domestic workers in Singapore: A mixed-methods study. <i>Archives of Public Health</i>, 84, Article 45. https://doi.org/10.1186/s13690-026-01844-z
-                  </p>
-                  <div className="text-[11px] text-amber-400 mt-2">Evidence Scope: Observational data (N=1,465 migrant workers) across CMP sectors.</div>
-                </div>
-              </HoverTooltipTile>
+            <div className="space-y-3 text-xs">
+              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Subramaniam et al. (2026): Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-title={"Subramaniam et al. (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Help-seeking"} data-tooltip-description={"Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-detail={"Used in the presentation to discuss informal support preferences and access barriers."} data-tooltip-tags={"Evidence,Methods,Migrant Workers"}>
+                <span className="font-bold text-white">Subramaniam, M., Zhang, Y., Satghare, P., Koh, Y. S., et al. (2026).</span>
+                <p className="text-slate-300 mt-1">
+                  Mental health help-seeking behaviour among migrant workers and migrant domestic workers in Singapore: A mixed-methods study. <i>Archives of Public Health</i>, 84, Article 45. https://doi.org/10.1186/s13690-026-01844-z
+                </p>
+                <div className="text-[11px] text-amber-400 mt-1">Evidence Scope: Observational data (N=1,465 migrant workers) across CMP sectors.</div>
+              </div>
 
-              <HoverTooltipTile
-                badge="Community Framework Audit"
-                title="Boehm & Cnaan (2012) Page & Scope Verification"
-                summary="Provides the process-based, participatory criteria used to structure the MW-WSP community intervention model."
-                metrics={[
-                  { label: 'Bibliographic Span', value: 'Full article pp. 141-168; criteria on pp. 146-151' },
-                  { label: 'Theoretical Role', value: 'Design criteria, not independently tested causal mechanisms' }
-                ]}
-                source="Journal of Sociology & Social Welfare, 39(1)"
-                accentColor="crimson"
-              >
-                <div className="p-4 h-full">
-                  <span className="font-bold text-white">Boehm, A., & Cnaan, R. A. (2012).</span>
-                  <p className="text-slate-300 mt-1">
-                    Towards a practice-based model for community practice: Linking theory and practice. <i>Journal of Sociology & Social Welfare</i>, 39(1), 141-168.
-                  </p>
-                  <div className="text-[11px] text-slate-400 mt-2">Course Anchor: Selected criteria 1 (Involvement), 2 (Deliberation), 3 (Implementation).</div>
-                </div>
-              </HoverTooltipTile>
+              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Boehm & Cnaan (2012): Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-title={"Boehm & Cnaan (2012)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Community practice"} data-tooltip-description={"Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-detail={"The app applies participation, deliberation and implementation criteria to the MW-WSP."} data-tooltip-tags={"Framework,Task 9,Community"}>
+                <span className="font-bold text-white">Boehm, A., & Cnaan, R. A. (2012).</span>
+                <p className="text-slate-300 mt-1">
+                  Towards a practice-based model for community practice: Linking theory and practice. <i>Journal of Sociology & Social Welfare</i>, 39(1), 141-168.
+                </p>
+                <div className="text-[11px] text-slate-400 mt-1">Course Anchor: Selected criteria 1 (Involvement), 2 (Deliberation), 3 (Implementation).</div>
+              </div>
 
-              <HoverTooltipTile
-                badge="Groupwork Theory Audit"
-                title="Hupcey (1998) Social Support Linkage"
-                summary="Establishes the 4 core concepts of social support and 4 functional dimensions used to transform dormitory bunks into reciprocal support networks."
-                metrics={[
-                  { label: '4 Core Concepts', value: 'Network, Perceived, Enacted & Reciprocal Exchange' },
-                  { label: '4 Functions', value: 'Emotional, Informational, Instrumental & Appraisal' }
-                ]}
-                source="Journal of Advanced Nursing, 27(6), 1231-1241"
-                accentColor="blue"
-              >
-                <div className="p-4 h-full">
-                  <span className="font-bold text-white">Hupcey, J. E. (1998).</span>
-                  <p className="text-slate-300 mt-1">
-                    Clarifying the social support theory-research linkage. <i>Journal of Advanced Nursing</i>, 27(6), 1231-1241.
-                  </p>
-                  <div className="text-[11px] text-slate-400 mt-2">Theory Anchor: Reciprocal social exchange and 4 functional dimensions.</div>
-                </div>
-              </HoverTooltipTile>
+              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Hupcey (1998): Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-title={"Hupcey (1998)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Social support"} data-tooltip-description={"Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-detail={"Applied to emotional, informational, instrumental and appraisal support in peer groups."} data-tooltip-tags={"Theory,Groupwork,Hupcey"}>
+                <span className="font-bold text-white">Hupcey, J. E. (1998).</span>
+                <p className="text-slate-300 mt-1">
+                  Clarifying the social support theory-research linkage. <i>Journal of Advanced Nursing</i>, 27(6), 1231-1241.
+                </p>
+                <div className="text-[11px] text-slate-400 mt-1">Theory Anchor: Reciprocal social exchange and 4 functional dimensions.</div>
+              </div>
 
-              <HoverTooltipTile
-                badge="Official Statistics Audit"
-                title="MOM (2026) Denominator & WSH Accuracy"
-                summary="Verifies Singapore foreign workforce denominators and workplace fatality/major injury rates for accurate academic reporting."
-                metrics={[
-                  { label: 'June 2026 Data', value: '1,655,900 foreign workers; 490,700 CMP Work Permits' },
-                  { label: '2025 WSH Report', value: 'Construction injury rate 26.3 per 100k (down from 31.0)' }
-                ]}
-                source="Ministry of Manpower (2026a, 2026b)"
-                accentColor="emerald"
-              >
-                <div className="p-4 h-full">
-                  <span className="font-bold text-white">Ministry of Manpower. (2026).</span>
-                  <p className="text-slate-300 mt-1">
-                    Foreign workforce numbers [June 2026 data] & WSH Report 2025: Record-low workplace fatality and major injury rates. Singapore Government.
-                  </p>
-                  <div className="text-[11px] text-emerald-400 mt-2">Verified Audit Date: 30 October 2026.</div>
-                </div>
-              </HoverTooltipTile>
+              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Ministry of Manpower (2026): Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-title={"Ministry of Manpower (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Singapore context"} data-tooltip-description={"Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-detail={"Provides contextual background for the project's issue and rationale."} data-tooltip-tags={"MOM,Statistics,Workplace Safety"}>
+                <span className="font-bold text-white">Ministry of Manpower. (2026).</span>
+                <p className="text-slate-300 mt-1">
+                  Foreign workforce numbers [June 2026 data] & WSH Report 2025: Record-low workplace fatality and major injury rates. Singapore Government.
+                </p>
+              </div>
             </div>
           </div>
         )}
-      </main>
+      </HoverTooltipArea>
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-950 px-4 py-4 text-center text-xs text-slate-400">
