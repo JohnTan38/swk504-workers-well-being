@@ -81,3 +81,9 @@
   [data-tooltip-title] { transition: none; }
   [data-tooltip-title]:hover, [data-tooltip-title]:focus-visible { transform: none; }
 }
+
+/* APA 7 reference entries: hanging indent for multi-line bibliographic citations. */
+.apa7-reference {
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+}

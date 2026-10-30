@@ -658,45 +658,91 @@ export default function App() {
 
         {/* TAB 5: ACADEMIC AUDIT & REFERENCES */}
         {activeTab === 'audit' && (
-          <div className="glass-panel p-6 rounded-2xl space-y-6">
-            <div>
-              <span className="text-xs uppercase font-extrabold tracking-widest text-[#D32F2F]">Scholarly Verification</span>
-              <h2 className="text-xl md:text-2xl font-bold text-white mt-1">APA 7th Reference Audit & Methodological Integrity</h2>
-              <p className="text-xs text-slate-300 mt-1">Verified against Singapore peer-reviewed empirical studies and ministry data.</p>
+          <div className="glass-panel p-4 sm:p-6 rounded-2xl space-y-7">
+            {/* QR is visible at the top of the audit panel, without interrupting the bibliography. */}
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px] gap-6 items-start">
+              <div>
+                <span className="text-xs uppercase font-extrabold tracking-widest text-[#D32F2F]">Scholarly Verification</span>
+                <h2 className="text-xl md:text-2xl font-bold text-white mt-1">APA 7th Reference Audit &amp; Methodological Integrity</h2>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">Academic sources supporting the groupwork and community intervention model, with Singapore evidence and relevant course texts.</p>
+                <p className="text-xs text-slate-400 mt-3">Book entries follow APA 7 author–date formatting, sentence-case titles and italicised book titles.</p>
+              </div>
+
+              <aside className="rounded-2xl border border-white/15 bg-slate-900/70 p-3 text-center shadow-lg" aria-label="Men at Work project QR code">
+                <div className="bg-white rounded-xl p-4 mx-auto w-full max-w-[184px]">
+                  <img
+                    src={`${import.meta.env.BASE_URL}qr-code-men-at-work.png`}
+                    alt="QR code supplied for the SWK504 Men at Work group project"
+                    width="320"
+                    height="320"
+                    loading="lazy"
+                    className="w-full h-auto object-contain"
+                    data-testid="men-at-work-qr-code"
+                  />
+                </div>
+                <p className="font-semibold text-white text-xs mt-3">Men at Work · Project QR</p>
+                <p className="text-[11px] text-slate-400 mt-1">Scan to open the SWK504 website</p>
+                <a
+                  href="https://swk504-workers-well-being.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1 text-[11px] mt-2 text-red-300 underline underline-offset-2 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400"
+                >
+                  Open project website <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                </a>
+              </aside>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Subramaniam et al. (2026): Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-title={"Subramaniam et al. (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Help-seeking"} data-tooltip-description={"Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-detail={"Used in the presentation to discuss informal support preferences and access barriers."} data-tooltip-tags={"Evidence,Methods,Migrant Workers"}>
-                <span className="font-bold text-white">Subramaniam, M., Zhang, Y., Satghare, P., Koh, Y. S., et al. (2026).</span>
-                <p className="text-slate-300 mt-1">
-                  Mental health help-seeking behaviour among migrant workers and migrant domestic workers in Singapore: A mixed-methods study. <i>Archives of Public Health</i>, 84, Article 45. https://doi.org/10.1186/s13690-026-01844-z
-                </p>
-                <div className="text-[11px] text-amber-400 mt-1">Evidence Scope: Observational data (N=1,465 migrant workers) across CMP sectors.</div>
+            {/* Requested course textbooks, formatted as APA 7 book references. */}
+            <section aria-labelledby="apa7-course-texts-title">
+              <h3 id="apa7-course-texts-title" className="text-sm font-bold text-amber-300 mb-3">Core Groupwork Texts</h3>
+              <div className="space-y-3 text-xs">
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label="Northen and Kurland (2001): Foundational text on social work with groups and group development." data-tooltip-title="Northen & Kurland (2001)" data-tooltip-category="CORE COURSE TEXT" data-tooltip-metric="Group development" data-tooltip-description="A foundational groupwork text used to understand group development, facilitation and effective social work practice with groups." data-tooltip-detail="Applied to the progressive stages of the peer-led dormitory self-help circles." data-tooltip-tags="Group Stages,Facilitation,Social Work">
+                  <p className="apa7-reference text-slate-200 leading-relaxed">Northen, H., &amp; Kurland, R. (2001). <i>Social work with groups</i> (3rd ed.). Columbia University Press.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">In-text citation: (Northen &amp; Kurland, 2001)</p>
+                </div>
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label="Toseland and Rivas (2022): Group work practice textbook for process, facilitation and group dynamics." data-tooltip-title="Toseland & Rivas (2022)" data-tooltip-category="CORE COURSE TEXT" data-tooltip-metric="Groupwork practice" data-tooltip-description="A core groupwork practice textbook addressing how groups are planned, facilitated, developed and evaluated." data-tooltip-detail="Supports attention to group dynamics, inclusion, facilitation and mutual aid among workers." data-tooltip-tags="Groupwork,Mutual Aid,Dynamics">
+                  <p className="apa7-reference text-slate-200 leading-relaxed">Toseland, R. W., &amp; Rivas, R. F. (2022). <i>An introduction to group work practice</i>. Pearson Education Limited.</p>
+                  <p className="text-[11px] text-slate-400 mt-2">In-text citation: (Toseland &amp; Rivas, 2022)</p>
+                </div>
               </div>
+            </section>
 
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Boehm & Cnaan (2012): Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-title={"Boehm & Cnaan (2012)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Community practice"} data-tooltip-description={"Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-detail={"The app applies participation, deliberation and implementation criteria to the MW-WSP."} data-tooltip-tags={"Framework,Task 9,Community"}>
-                <span className="font-bold text-white">Boehm, A., & Cnaan, R. A. (2012).</span>
-                <p className="text-slate-300 mt-1">
-                  Towards a practice-based model for community practice: Linking theory and practice. <i>Journal of Sociology & Social Welfare</i>, 39(1), 141-168.
-                </p>
-                <div className="text-[11px] text-slate-400 mt-1">Course Anchor: Selected criteria 1 (Involvement), 2 (Deliberation), 3 (Implementation).</div>
-              </div>
+            <section aria-labelledby="apa7-existing-references-title">
+              <h3 id="apa7-existing-references-title" className="text-sm font-bold text-white mb-3">Research, Theory &amp; Singapore Context</h3>
+              <div className="space-y-3 text-xs">
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Subramaniam et al. (2026): Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-title={"Subramaniam et al. (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Help-seeking"} data-tooltip-description={"Empirical study cited in the SWK504 project on mental health help-seeking among migrant workers in Singapore."} data-tooltip-detail={"Used in the presentation to discuss informal support preferences and access barriers."} data-tooltip-tags={"Evidence,Methods,Migrant Workers"}>
+                  <span className="font-bold text-white">Subramaniam, M., Zhang, Y., Satghare, P., Koh, Y. S., et al. (2026).</span>
+                  <p className="text-slate-300 mt-1">
+                    Mental health help-seeking behaviour among migrant workers and migrant domestic workers in Singapore: A mixed-methods study. <i>Archives of Public Health</i>, 84, Article 45. https://doi.org/10.1186/s13690-026-01844-z
+                  </p>
+                  <div className="text-[11px] text-amber-400 mt-1">Evidence Scope: Observational data (N=1,465 migrant workers) across CMP sectors.</div>
+                </div>
 
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Hupcey (1998): Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-title={"Hupcey (1998)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Social support"} data-tooltip-description={"Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-detail={"Applied to emotional, informational, instrumental and appraisal support in peer groups."} data-tooltip-tags={"Theory,Groupwork,Hupcey"}>
-                <span className="font-bold text-white">Hupcey, J. E. (1998).</span>
-                <p className="text-slate-300 mt-1">
-                  Clarifying the social support theory-research linkage. <i>Journal of Advanced Nursing</i>, 27(6), 1231-1241.
-                </p>
-                <div className="text-[11px] text-slate-400 mt-1">Theory Anchor: Reciprocal social exchange and 4 functional dimensions.</div>
-              </div>
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Boehm & Cnaan (2012): Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-title={"Boehm & Cnaan (2012)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Community practice"} data-tooltip-description={"Theoretical framework for choosing a community practice approach and linking concepts with implementation."} data-tooltip-detail={"The app applies participation, deliberation and implementation criteria to the MW-WSP."} data-tooltip-tags={"Framework,Task 9,Community"}>
+                  <span className="font-bold text-white">Boehm, A., &amp; Cnaan, R. A. (2012).</span>
+                  <p className="text-slate-300 mt-1">
+                    Towards a practice-based model for community practice: Linking theory and practice. <i>Journal of Sociology &amp; Social Welfare</i>, 39(1), 141-168.
+                  </p>
+                  <div className="text-[11px] text-slate-400 mt-1">Course Anchor: Selected criteria 1 (Involvement), 2 (Deliberation), 3 (Implementation).</div>
+                </div>
 
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Ministry of Manpower (2026): Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-title={"Ministry of Manpower (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Singapore context"} data-tooltip-description={"Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-detail={"Provides contextual background for the project's issue and rationale."} data-tooltip-tags={"MOM,Statistics,Workplace Safety"}>
-                <span className="font-bold text-white">Ministry of Manpower. (2026).</span>
-                <p className="text-slate-300 mt-1">
-                  Foreign workforce numbers [June 2026 data] & WSH Report 2025: Record-low workplace fatality and major injury rates. Singapore Government.
-                </p>
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Hupcey (1998): Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-title={"Hupcey (1998)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Social support"} data-tooltip-description={"Social Support Theory anchor in the SWK504 project, covering relationships and reciprocal support functions."} data-tooltip-detail={"Applied to emotional, informational, instrumental and appraisal support in peer groups."} data-tooltip-tags={"Theory,Groupwork,Hupcey"}>
+                  <span className="font-bold text-white">Hupcey, J. E. (1998).</span>
+                  <p className="text-slate-300 mt-1">
+                    Clarifying the social support theory-research linkage. <i>Journal of Advanced Nursing</i>, 27(6), 1231-1241.
+                  </p>
+                  <div className="text-[11px] text-slate-400 mt-1">Theory Anchor: Reciprocal social exchange and 4 functional dimensions.</div>
+                </div>
+
+                <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800" role="group" tabIndex={0} aria-label={"Ministry of Manpower (2026): Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-title={"Ministry of Manpower (2026)"} data-tooltip-category={"ACADEMIC REFERENCE"} data-tooltip-metric={"Singapore context"} data-tooltip-description={"Government data cited for workforce scale, workplace safety conditions and employment context."} data-tooltip-detail={"Provides contextual background for the project's issue and rationale."} data-tooltip-tags={"MOM,Statistics,Workplace Safety"}>
+                  <span className="font-bold text-white">Ministry of Manpower. (2026).</span>
+                  <p className="text-slate-300 mt-1">
+                    Foreign workforce numbers [June 2026 data] &amp; WSH Report 2025: Record-low workplace fatality and major injury rates. Singapore Government.
+                  </p>
+                </div>
               </div>
-            </div>
+            </section>
           </div>
         )}
       </HoverTooltipArea>
