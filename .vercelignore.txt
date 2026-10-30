@@ -1,0 +1,15 @@
+# Testing suites and local configs
+tests/
+playwright.config.ts
+test-results/
+playwright-report/
+.github/
+
+# Documentation and drafts
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore

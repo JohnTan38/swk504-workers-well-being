@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <g id="suss-mark">
+    <!-- First 'S' -->
+    <path d="M 45 42 C 45 28 62 20 84 20 C 112 20 125 32 125 50 C 125 80 50 72 50 102 C 50 120 68 128 92 128 C 118 128 132 114 132 100" fill="none" stroke="#1B2A4A" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Red 'U' with 3 Dots -->
+    <path d="M 172 20 L 172 82 C 172 118 190 128 220 128 C 250 128 268 118 268 82 L 268 20" fill="none" stroke="#D32F2F" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="220" cy="30" r="11" fill="#D32F2F" />
+    <circle cx="220" cy="62" r="11" fill="#D32F2F" />
+    <circle cx="220" cy="94" r="11" fill="#D32F2F" />
+    
+    <!-- Second 'S' -->
+    <path d="M 310 42 C 310 28 327 20 349 20 C 377 20 390 32 390 50 C 390 80 315 72 315 102 C 315 120 333 128 357 128 C 383 128 397 114 397 100" fill="none" stroke="#1B2A4A" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+    
+    <!-- Third 'S' -->
+    <path d="M 440 42 C 440 28 457 20 479 20 C 507 20 520 32 520 50 C 520 80 445 72 445 102 C 445 120 463 128 487 128 C 513 128 527 114 527 100" fill="none" stroke="#1B2A4A" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <text x="46" y="172" font-family="&#39;Plus Jakarta Sans&#39;, system-ui, sans-serif" font-weight="800" font-size="28" fill="#1B2A4A" letter-spacing="3.5">SINGAPORE UNIVERSITY</text>
+  <text x="46" y="206" font-family="&#39;Plus Jakarta Sans&#39;, system-ui, sans-serif" font-weight="800" font-size="28" fill="#1B2A4A" letter-spacing="3.5">OF SOCIAL SCIENCES</text>
+</svg>

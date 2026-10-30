@@ -1,0 +1,22 @@
+swk504-migrant-workers-well-being/
+├── .github/
+│   └── workflows/
+│       └── playwright.yml         # CI workflow for automated testing
+├── tests/
+│   └── app.spec.ts                # Complete Playwright test suite (100% test coverage)
+├── public/
+│   ├── favicon.ico
+│   └── suss-logo.svg              # SUSS vector brand asset
+├── src/
+│   ├── App.jsx                    # Full interactive web application & slide deck simulator
+│   ├── index.css                  # Tailwind styles and glassmorphism directives
+│   └── main.jsx                   # React 18 DOM mount
+├── .gitignore                     # Git ignore rules
+├── .vercelignore                  # Vercel deployment exclusions
+├── index.html                     # HTML5 entry with Tailwind & Lucide preloads
+├── package.json                   # Dependencies, scripts (dev, build, test)
+├── playwright.config.ts           # Playwright configuration
+├── postcss.config.js              # PostCSS config for Tailwind
+├── tailwind.config.js             # SUSS color tokens and glassmorphism styling
+├── vercel.json                    # Vercel routing and cache configuration
+└── README.md                      # Academic documentation & deployment guide
